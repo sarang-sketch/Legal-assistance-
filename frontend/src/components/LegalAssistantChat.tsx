@@ -52,7 +52,7 @@ export const LegalAssistantChat: React.FC = () => {
         <div className="flex items-start justify-between">
           <div className="space-y-2">
             <div className="inline-flex items-center space-x-2 px-2.5 py-1 rounded-full bg-blue-700/50 text-blue-200 text-xs font-semibold">
-              <Sparkles className="w-3.5 h-3.5" />
+              <Sparkles aria-hidden="true" className="w-3.5 h-3.5" />
               <span>Gemini 1.5 Pro • 1M Context Window • Search Grounded</span>
             </div>
             <h1 className="text-2xl font-bold google-sans">Jurisprudential Research Copilot</h1>
@@ -69,14 +69,17 @@ export const LegalAssistantChat: React.FC = () => {
 
       {/* Query Controls */}
       <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm space-y-4">
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} aria-label="Legal Research Query Form" className="space-y-4">
           <div className="flex flex-wrap gap-4 items-center justify-between pb-2 border-b border-gray-100">
             <div className="flex items-center space-x-3">
-              <label className="text-xs font-medium text-gray-500 uppercase tracking-wider">Jurisdiction:</label>
+              <label htmlFor="jurisdiction-select" className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Jurisdiction:
+              </label>
               <select
+                id="jurisdiction-select"
                 value={jurisdiction}
                 onChange={(e) => setJurisdiction(e.target.value)}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-google-blue focus:border-google-blue p-2"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-google-blue focus:border-google-blue p-2 focus-visible:outline-none focus-visible:ring-2"
               >
                 <option value="California">California (9th Cir. / Cal. Codes)</option>
                 <option value="Federal">Federal (U.S. Code & F.R.C.P.)</option>
@@ -86,46 +89,52 @@ export const LegalAssistantChat: React.FC = () => {
               </select>
             </div>
 
-            <label className="flex items-center space-x-2 cursor-pointer text-sm text-gray-700">
+            <label htmlFor="grounding-checkbox" className="flex items-center space-x-2 cursor-pointer text-sm text-gray-700">
               <input
+                id="grounding-checkbox"
                 type="checkbox"
                 checked={enableGrounding}
                 onChange={(e) => setEnableGrounding(e.target.checked)}
-                className="rounded border-gray-300 text-google-blue focus:ring-google-blue"
+                className="rounded border-gray-300 text-google-blue focus:ring-google-blue focus-visible:ring-2"
               />
               <span className="font-medium">Google Search Grounding (Live Dockets)</span>
             </label>
           </div>
 
           <div>
+            <label htmlFor="legal-prompt-textarea" className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
+              Enter Legal Research Inquiry:
+            </label>
             <textarea
+              id="legal-prompt-textarea"
               rows={3}
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               placeholder="e.g. What are the affirmative defenses to an unlawful detainer eviction action based on failure to maintain tenantability under California law?"
-              className="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-google-blue focus:border-transparent text-gray-900 text-sm"
+              className="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-google-blue focus:border-transparent text-gray-900 text-sm focus-visible:outline-none"
             />
           </div>
 
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-2 text-xs text-gray-500">
-              <CheckCircle2 className="w-4 h-4 text-green-600" />
+              <CheckCircle2 aria-hidden="true" className="w-4 h-4 text-green-600" />
               <span>Automatic PII & Attorney-Client Privilege Redaction Active</span>
             </div>
             <button
               type="submit"
               disabled={loading || !prompt.trim()}
+              aria-label={loading ? 'Analyzing doctrine with Gemini on Vertex AI' : 'Submit legal research analysis'}
               className="inline-flex items-center space-x-2 px-6 py-2.5 bg-google-blue text-white rounded-lg font-medium text-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-google-blue disabled:opacity-50 transition-all shadow-sm"
             >
               {loading ? (
-                <>
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                <span role="status" className="flex items-center space-x-2">
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" aria-hidden="true"></div>
                   <span>Reasoning on Vertex AI...</span>
-                </>
+                </span>
               ) : (
                 <>
                   <span>Analyze Doctrine</span>
-                  <Send className="w-4 h-4" />
+                  <Send aria-hidden="true" className="w-4 h-4" />
                 </>
               )}
             </button>
@@ -135,7 +144,7 @@ export const LegalAssistantChat: React.FC = () => {
 
       {/* Response Display */}
       {response && (
-        <div className="space-y-6">
+        <section role="region" aria-label="Legal Copilot Findings" aria-live="polite" className="space-y-6">
           <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm space-y-4">
             <div className="flex items-center justify-between border-b border-gray-100 pb-3">
               <div className="flex items-center space-x-2">
@@ -148,17 +157,19 @@ export const LegalAssistantChat: React.FC = () => {
                 <button
                   onClick={() => handleSimplify('en')}
                   disabled={simplifying}
-                  className="inline-flex items-center space-x-1.5 px-3 py-1 bg-amber-50 text-amber-800 border border-amber-200 rounded-md text-xs font-medium hover:bg-amber-100 transition-colors"
+                  aria-label="Simplify legal text to 8th grade English"
+                  className="inline-flex items-center space-x-1.5 px-3 py-1 bg-amber-50 text-amber-800 border border-amber-200 rounded-md text-xs font-medium hover:bg-amber-100 transition-colors focus-visible:ring-2 focus-visible:ring-amber-500"
                 >
-                  <Languages className="w-3.5 h-3.5" />
+                  <Languages aria-hidden="true" className="w-3.5 h-3.5" />
                   <span>Simplify (8th Grade Plain Language)</span>
                 </button>
                 <button
                   onClick={() => handleSimplify('es')}
                   disabled={simplifying}
-                  className="inline-flex items-center space-x-1.5 px-3 py-1 bg-blue-50 text-blue-800 border border-blue-200 rounded-md text-xs font-medium hover:bg-blue-100 transition-colors"
+                  aria-label="Translate legal text to Spanish"
+                  className="inline-flex items-center space-x-1.5 px-3 py-1 bg-blue-50 text-blue-800 border border-blue-200 rounded-md text-xs font-medium hover:bg-blue-100 transition-colors focus-visible:ring-2 focus-visible:ring-google-blue"
                 >
-                  <Languages className="w-3.5 h-3.5" />
+                  <Languages aria-hidden="true" className="w-3.5 h-3.5" />
                   <span>Traducir al Español</span>
                 </button>
               </div>
@@ -166,9 +177,9 @@ export const LegalAssistantChat: React.FC = () => {
 
             {/* Simplified Text Box if generated */}
             {simplifiedText && (
-              <div className="p-4 bg-amber-50/70 border border-amber-200 rounded-lg text-sm text-amber-950 space-y-2">
+              <div role="region" aria-label="Simplified Plain Language Summary" className="p-4 bg-amber-50/70 border border-amber-200 rounded-lg text-sm text-amber-950 space-y-2">
                 <div className="font-semibold text-xs tracking-wider text-amber-800 uppercase flex items-center space-x-1.5">
-                  <Languages className="w-4 h-4" />
+                  <Languages aria-hidden="true" className="w-4 h-4" />
                   <span>Google Cloud Translation • Plain Language Synthesis</span>
                 </div>
                 <p className="leading-relaxed">{simplifiedText}</p>
@@ -183,11 +194,11 @@ export const LegalAssistantChat: React.FC = () => {
             {/* Actionable Next Steps */}
             {response.actionable_next_steps.length > 0 && (
               <div className="pt-4 border-t border-gray-100">
-                <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Procedural Action Items:</h4>
+                <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Procedural Action Items:</h2>
                 <ul className="space-y-1.5">
                   {response.actionable_next_steps.map((step, idx) => (
                     <li key={idx} className="flex items-start space-x-2 text-sm text-gray-700">
-                      <ArrowRight className="w-4 h-4 text-google-blue shrink-0 mt-0.5" />
+                      <ArrowRight aria-hidden="true" className="w-4 h-4 text-google-blue shrink-0 mt-0.5" />
                       <span>{step}</span>
                     </li>
                   ))}
@@ -197,10 +208,10 @@ export const LegalAssistantChat: React.FC = () => {
 
             {/* Grounded Citations */}
             <div className="pt-4 border-t border-gray-100">
-              <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 flex items-center space-x-1.5">
-                <BookOpen className="w-4 h-4 text-google-blue" />
+              <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 flex items-center space-x-1.5">
+                <BookOpen aria-hidden="true" className="w-4 h-4 text-google-blue" />
                 <span>Grounded Authorities & Binding Precedents:</span>
-              </h4>
+              </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {response.grounded_citations.map((c, i) => (
                   <div key={i} className="p-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-blue-300 transition-colors">
@@ -216,10 +227,11 @@ export const LegalAssistantChat: React.FC = () => {
                         href={c.uri}
                         target="_blank"
                         rel="noreferrer"
-                        className="text-xs text-google-blue hover:underline inline-flex items-center space-x-1"
+                        aria-label={`View official law source for ${c.title}`}
+                        className="text-xs text-google-blue hover:underline inline-flex items-center space-x-1 focus-visible:ring-1 focus-visible:ring-google-blue"
                       >
                         <span>View Official Source</span>
-                        <ArrowRight className="w-3 h-3" />
+                        <ArrowRight aria-hidden="true" className="w-3 h-3" />
                       </a>
                     )}
                   </div>
@@ -228,12 +240,12 @@ export const LegalAssistantChat: React.FC = () => {
             </div>
 
             {/* Mandatory UPL Disclaimer */}
-            <div className="p-3 bg-gray-50 rounded-lg border border-gray-200 text-xs text-gray-500 flex items-start space-x-2">
-              <AlertCircle className="w-4 h-4 text-gray-400 shrink-0 mt-0.5" />
+            <div role="note" className="p-3 bg-gray-50 rounded-lg border border-gray-200 text-xs text-gray-500 flex items-start space-x-2">
+              <AlertCircle aria-hidden="true" className="w-4 h-4 text-gray-400 shrink-0 mt-0.5" />
               <span>{response.disclaimer}</span>
             </div>
           </div>
-        </div>
+        </section>
       )}
     </div>
   );

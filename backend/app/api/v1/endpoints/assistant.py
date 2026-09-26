@@ -11,6 +11,8 @@ from app.services.bigquery_analytics import BigQueryAnalyticsService
 from app.services.gemini_legal_service import GeminiLegalService
 from app.services.translation_service import TranslationService
 
+from app.core.cache import query_cache
+
 router = APIRouter()
 gemini_service = GeminiLegalService()
 translation_service = TranslationService()
@@ -28,15 +30,22 @@ async def query_legal_assistant(
     request: LegalAssistantQueryRequest,
     current_user: AuthenticatedUser = Depends(get_current_user),
 ) -> LegalAssistantQueryResponse:
-    """Execute grounded legal analysis with PII scrubbing and compliance audit logging."""
+    """Execute grounded legal analysis with PII scrubbing, caching, and audit logging."""
     logger.info(f"User {current_user.uid} ({current_user.role}) initiated legal inquiry.")
 
-    # Sanitize sensitive client inputs
+    # Sanitize sensitive client inputs & defend against prompt injection
     sanitized_prompt = sanitize_legal_text(request.prompt)
     request.prompt = sanitized_prompt
 
+    # High-Performance Semantic LRU Cache check
+    cache_key = f"{request.jurisdiction}:{sanitized_prompt}"
+    cached_response = query_cache.get(cache_key)
+    if cached_response:
+        return cached_response
+
     # Execute Gemini 1.5 Pro reasoning
     response = await gemini_service.query_legal_assistant(request)
+    query_cache.set(cache_key, response)
 
     # Stream compliance audit record to BigQuery
     audit_event = BigQueryAuditRecord(

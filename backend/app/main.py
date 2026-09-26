@@ -27,23 +27,49 @@ app = FastAPI(
     redoc_url=f"{settings.API_V1_PREFIX}/redoc",
 )
 
+from starlette.middleware.gzip import GZipMiddleware
+from app.core.security import rate_limiter
+
 # Configure CORS Middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.ALLOWED_ORIGINS,
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
 
+# High-Performance GZip Compression (Efficiency Enhancement)
+app.add_middleware(GZipMiddleware, minimum_size=1000)
+
 
 @app.middleware("http")
-async def add_process_time_header(request: Request, call_next):
-    """Inject server execution latency header and structured request logging."""
+async def security_and_telemetry_middleware(request: Request, call_next):
+    """Enforce rate limiting, latency timing, and hardened OWASP security headers."""
+    client_ip = request.client.host if request.client else "127.0.0.1"
+    
+    # Rate Limiting Check
+    if not rate_limiter.is_allowed(client_ip):
+        return JSONResponse(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            content={"detail": "Too many requests. Rate limit exceeded (120 requests/min)."},
+        )
+
     start_time = time.time()
     response = await call_next(request)
     process_time = (time.time() - start_time) * 1000
+
+    # Latency Telemetry Header
     response.headers["X-Process-Time-Ms"] = f"{process_time:.2f}"
+    
+    # OWASP Defense-in-Depth Security Headers
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+    response.headers["Permissions-Policy"] = "geolocation=(), camera=(), microphone=()"
+
     return response
 
 

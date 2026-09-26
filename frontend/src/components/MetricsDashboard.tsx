@@ -27,7 +27,7 @@ export const MetricsDashboard: React.FC = () => {
       <div className="bg-gradient-to-r from-blue-950 to-cyan-900 text-white rounded-xl p-6 shadow-sm flex justify-between items-center">
         <div>
           <div className="inline-flex items-center space-x-2 px-2.5 py-1 rounded-full bg-cyan-800 text-cyan-200 text-xs font-semibold mb-2">
-            <Database className="w-3.5 h-3.5" />
+            <Database aria-hidden="true" className="w-3.5 h-3.5" />
             <span>Google BigQuery • Serverless Analytics & Regulatory Audit Trail</span>
           </div>
           <h1 className="text-2xl font-bold google-sans">Access-to-Justice & Operations Telemetry</h1>
@@ -42,18 +42,18 @@ export const MetricsDashboard: React.FC = () => {
       </div>
 
       {loading ? (
-        <div className="text-center py-20 text-gray-500">
-          <div className="w-8 h-8 border-4 border-google-blue border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
+        <div role="status" className="text-center py-20 text-gray-500">
+          <div className="w-8 h-8 border-4 border-google-blue border-t-transparent rounded-full animate-spin mx-auto mb-3" aria-hidden="true"></div>
           <p className="text-sm">Querying Google BigQuery Analytics Engine...</p>
         </div>
       ) : metrics ? (
-        <div className="space-y-6">
+        <section role="region" aria-label="BigQuery Telemetry and Operations Metrics" className="space-y-6">
           {/* KPI Stat Cards */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-gray-500 uppercase">Pro-Bono Match Rate</span>
-                <Users className="w-4 h-4 text-emerald-600" />
+                <h2 className="text-xs font-bold text-gray-500 uppercase">Pro-Bono Match Rate</h2>
+                <Users aria-hidden="true" className="w-4 h-4 text-emerald-600" />
               </div>
               <div className="mt-3 flex items-baseline space-x-2">
                 <span className="text-3xl font-extrabold text-emerald-600">{metrics.pro_bono_match_rate_pct}%</span>
@@ -63,8 +63,8 @@ export const MetricsDashboard: React.FC = () => {
 
             <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-gray-500 uppercase">Total Litigants Triaged</span>
-                <FileCheck className="w-4 h-4 text-google-blue" />
+                <h2 className="text-xs font-bold text-gray-500 uppercase">Total Litigants Triaged</h2>
+                <FileCheck aria-hidden="true" className="w-4 h-4 text-google-blue" />
               </div>
               <div className="mt-3 flex items-baseline space-x-2">
                 <span className="text-3xl font-extrabold text-gray-900">{metrics.total_cases_triaged}</span>
@@ -74,8 +74,8 @@ export const MetricsDashboard: React.FC = () => {
 
             <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-gray-500 uppercase">Contracts Audited</span>
-                <BarChart3 className="w-4 h-4 text-purple-600" />
+                <h2 className="text-xs font-bold text-gray-500 uppercase">Contracts Audited</h2>
+                <BarChart3 aria-hidden="true" className="w-4 h-4 text-purple-600" />
               </div>
               <div className="mt-3 flex items-baseline space-x-2">
                 <span className="text-3xl font-extrabold text-purple-700">{metrics.total_contracts_scanned}</span>
@@ -85,8 +85,8 @@ export const MetricsDashboard: React.FC = () => {
 
             <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-gray-500 uppercase">Mean Serving Latency</span>
-                <Clock className="w-4 h-4 text-cyan-600" />
+                <h2 className="text-xs font-bold text-gray-500 uppercase">Mean Serving Latency</h2>
+                <Clock aria-hidden="true" className="w-4 h-4 text-cyan-600" />
               </div>
               <div className="mt-3 flex items-baseline space-x-2">
                 <span className="text-3xl font-extrabold text-cyan-700">{metrics.avg_latency_ms.toFixed(0)}</span>
@@ -100,7 +100,7 @@ export const MetricsDashboard: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm space-y-4">
               <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider flex items-center space-x-2">
-                <BarChart3 className="w-4 h-4 text-google-blue" />
+                <BarChart3 aria-hidden="true" className="w-4 h-4 text-google-blue" />
                 <span>Caseload Distribution by Civil Legal Domain:</span>
               </h3>
               <div className="space-y-3 pt-2">
@@ -113,7 +113,14 @@ export const MetricsDashboard: React.FC = () => {
                         <span>{category}</span>
                         <span className="font-bold text-gray-900">{count} cases</span>
                       </div>
-                      <div className="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden">
+                      <div
+                        role="progressbar"
+                        aria-label={`Caseload for ${category}`}
+                        aria-valuenow={count}
+                        aria-valuemin={0}
+                        aria-valuemax={maxCount}
+                        className="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden"
+                      >
                         <div
                           className="bg-google-blue h-2.5 rounded-full transition-all duration-500"
                           style={{ width: `${pct}%` }}
@@ -128,7 +135,7 @@ export const MetricsDashboard: React.FC = () => {
             {/* Compliance & Security Attestation */}
             <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm space-y-4">
               <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider flex items-center space-x-2">
-                <Shield className="w-4 h-4 text-emerald-600" />
+                <Shield aria-hidden="true" className="w-4 h-4 text-emerald-600" />
                 <span>Security & Regulatory Audit Status:</span>
               </h3>
               <div className="space-y-3 pt-2 text-xs">
@@ -151,7 +158,7 @@ export const MetricsDashboard: React.FC = () => {
               </div>
             </div>
           </div>
-        </div>
+        </section>
       ) : null}
     </div>
   );

@@ -16,11 +16,11 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
   ];
 
   return (
-    <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+    <header role="banner" className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-3">
-            <div className="p-2 bg-blue-50 rounded-lg text-google-blue">
+            <div className="p-2 bg-blue-50 rounded-lg text-google-blue" aria-hidden="true">
               <Scale className="w-6 h-6" />
             </div>
             <div>
@@ -34,7 +34,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
             </div>
           </div>
 
-          <nav className="flex space-x-1">
+          <nav role="navigation" aria-label="Main Navigation" className="flex space-x-1">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
@@ -42,13 +42,14 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  aria-current={isActive ? 'page' : undefined}
+                  className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-google-blue focus-visible:outline-none ${
                     isActive
                       ? 'bg-blue-50 text-google-blue border-b-2 border-google-blue'
                       : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                   }`}
                 >
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-google-blue' : 'text-gray-400'}`} />
+                  <Icon aria-hidden="true" className={`w-4 h-4 ${isActive ? 'text-google-blue' : 'text-gray-400'}`} />
                   <span>{tab.label}</span>
                 </button>
               );
@@ -56,8 +57,8 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
           </nav>
 
           <div className="flex items-center space-x-3">
-            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">
-              <span className="w-1.5 h-1.5 mr-1.5 bg-green-500 rounded-full animate-pulse"></span>
+            <span role="status" className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">
+              <span aria-hidden="true" className="w-1.5 h-1.5 mr-1.5 bg-green-500 rounded-full animate-pulse"></span>
               ABA 5.5 Guard Active
             </span>
           </div>

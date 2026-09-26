@@ -19,6 +19,24 @@
 
 ---
 
+## 🎯 Problem Statement Alignment
+
+JustitiaAI is explicitly aligned with the Hackathon's mission to bridge the civil justice gap and revolutionize legal workflows using Google Cloud AI:
+
+| Problem Statement Objective | JustitiaAI Architectural Solution | Google Cloud Service |
+| :--- | :--- | :--- |
+| **Democratize Legal Access** | Instant 125%–200% FPL poverty guideline calculation and legal aid clinic matching. | **Gemini 1.5 Flash (Vertex AI)** |
+| **Emergency Deadline Defense** | Court summons triage preventing automatic default judgments (Form UD-105, FW-001). | **Gemini 1.5 Pro & Rules Engine** |
+| **Anti-Hallucination Research** | Ground-truth statutory verification and automated Shepardizing of overruled case law. | **Google Search Grounding** |
+| **Precedent & Code RAG** | 768-dim dense semantic search over federal and state statutes without exact keywords. | **Vertex AI Vector Search (`text-embedding-004`)** |
+| **Contract Risk Transparency** | Clause-by-clause liability scorecards and protective counter-redlines. | **Google Document AI (Contract Parser)** |
+| **Language Inclusivity** | Translates dense legalese into 8th-grade plain language in English and Spanish. | **Google Cloud Translation API (v3)** |
+| **Ethical & UPL Guardrails** | Strict workflow copilot boundaries under ABA Model Rule 5.5 and automated PII scrubbing. | **Zero-Trust Security & PII Redactor** |
+
+See full alignment specifications in [**`PROBLEM_STATEMENT_ALIGNMENT.md`**](file:///c:/Users/saran/Downloads/ai/PROBLEM_STATEMENT_ALIGNMENT.md), [**`ACCESSIBILITY.md`**](file:///c:/Users/saran/Downloads/ai/ACCESSIBILITY.md), and [**`SECURITY.md`**](file:///c:/Users/saran/Downloads/ai/SECURITY.md).
+
+---
+
 ## 🚀 Key Google Cloud Platform Technologies Integrated
 
 | Google Service | Architectural Role | Implementation Details |

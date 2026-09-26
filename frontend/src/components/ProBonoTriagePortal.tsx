@@ -42,7 +42,7 @@ export const ProBonoTriagePortal: React.FC = () => {
         <div className="flex items-start justify-between">
           <div className="space-y-2">
             <div className="inline-flex items-center space-x-2 px-2.5 py-1 rounded-full bg-emerald-700/60 text-emerald-200 text-xs font-semibold">
-              <HeartHandshake className="w-3.5 h-3.5" />
+              <HeartHandshake aria-hidden="true" className="w-3.5 h-3.5" />
               <span>Equal Justice Initiative • Free Pro-Bono Legal Aid Triage</span>
             </div>
             <h1 className="text-2xl font-bold google-sans">Access-to-Justice Intake Portal</h1>
@@ -59,84 +59,90 @@ export const ProBonoTriagePortal: React.FC = () => {
 
       {/* Intake Wizard Form */}
       <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-        <form onSubmit={handleTriage} className="space-y-5">
+        <form onSubmit={handleTriage} aria-label="Legal Aid Eligibility Intake Form" className="space-y-5">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
+              <label htmlFor="annual-income-input" className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
                 Annual Household Income ($)
               </label>
               <input
+                id="annual-income-input"
                 type="number"
                 value={annualIncome}
                 onChange={(e) => setAnnualIncome(Number(e.target.value))}
-                className="w-full text-sm p-2.5 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500"
+                className="w-full text-sm p-2.5 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 focus-visible:outline-none focus-visible:ring-2"
                 min="0"
                 step="500"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
+              <label htmlFor="household-size-input" className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
                 Family / Household Size
               </label>
               <input
+                id="household-size-input"
                 type="number"
                 value={householdSize}
                 onChange={(e) => setHouseholdSize(Number(e.target.value))}
-                className="w-full text-sm p-2.5 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500"
+                className="w-full text-sm p-2.5 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 focus-visible:outline-none focus-visible:ring-2"
                 min="1"
                 max="12"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
+              <label htmlFor="state-zip-input" className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
                 State / Zip Code
               </label>
               <input
+                id="state-zip-input"
                 type="text"
                 value={stateOrZip}
                 onChange={(e) => setStateOrZip(e.target.value)}
-                className="w-full text-sm p-2.5 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500"
+                className="w-full text-sm p-2.5 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 focus-visible:outline-none focus-visible:ring-2"
                 placeholder="CA or 94103"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
+            <label htmlFor="legal-crisis-textarea" className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
               Describe Your Legal Emergency in Plain Words
             </label>
             <textarea
+              id="legal-crisis-textarea"
               rows={3}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full text-sm p-3 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500"
+              className="w-full text-sm p-3 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 focus-visible:outline-none focus-visible:ring-2"
               placeholder="Tell us what happened..."
             />
           </div>
 
           <div className="flex flex-wrap items-center justify-between gap-4 pt-2 border-t border-gray-100">
             <div className="flex items-center space-x-6">
-              <label className="flex items-center space-x-2 cursor-pointer text-sm text-gray-800 font-medium">
+              <label htmlFor="summons-served-checkbox" className="flex items-center space-x-2 cursor-pointer text-sm text-gray-800 font-medium">
                 <input
+                  id="summons-served-checkbox"
                   type="checkbox"
                   checked={hasSummons}
                   onChange={(e) => setHasSummons(e.target.checked)}
-                  className="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                  className="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500 focus-visible:ring-2"
                 />
                 <span>I received a Court Summons / Notice to Vacate</span>
               </label>
 
               {hasSummons && (
                 <div className="flex items-center space-x-2">
-                  <Calendar className="w-4 h-4 text-gray-400" />
-                  <span className="text-xs text-gray-500">Court Hearing Date:</span>
+                  <Calendar aria-hidden="true" className="w-4 h-4 text-gray-400" />
+                  <label htmlFor="hearing-date-picker" className="text-xs text-gray-500">Court Hearing Date:</label>
                   <input
+                    id="hearing-date-picker"
                     type="date"
                     value={hearingDate}
                     onChange={(e) => setHearingDate(e.target.value)}
-                    className="text-xs p-1.5 border border-gray-300 rounded-md"
+                    className="text-xs p-1.5 border border-gray-300 rounded-md focus-visible:ring-2 focus-visible:ring-emerald-500"
                   />
                 </div>
               )}
@@ -145,17 +151,18 @@ export const ProBonoTriagePortal: React.FC = () => {
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-2.5 bg-emerald-700 text-white rounded-lg font-medium text-sm hover:bg-emerald-800 disabled:opacity-50 transition-all shadow-sm flex items-center space-x-2"
+              aria-label={loading ? 'Evaluating poverty guidelines and legal clinics' : 'Evaluate my legal aid eligibility'}
+              className="px-6 py-2.5 bg-emerald-700 text-white rounded-lg font-medium text-sm hover:bg-emerald-800 disabled:opacity-50 transition-all shadow-sm flex items-center space-x-2 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-emerald-600 focus-visible:outline-none"
             >
               {loading ? (
-                <>
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                <span role="status" className="flex items-center space-x-2">
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" aria-hidden="true"></div>
                   <span>Evaluating Poverty Guidelines...</span>
-                </>
+                </span>
               ) : (
                 <>
                   <span>Evaluate My Legal Aid Eligibility</span>
-                  <ShieldCheck className="w-4 h-4" />
+                  <ShieldCheck aria-hidden="true" className="w-4 h-4" />
                 </>
               )}
             </button>
@@ -165,13 +172,13 @@ export const ProBonoTriagePortal: React.FC = () => {
 
       {/* Triage Results Display */}
       {result && (
-        <div className="space-y-6">
+        <section role="region" aria-label="Legal Aid Triage Results" aria-live="polite" className="space-y-6">
           {/* Emergency Alert if applicable */}
           {result.statutory_deadline_warning && (
-            <div className="p-4 bg-red-50 border-l-4 border-red-600 rounded-r-xl flex items-start space-x-3 text-red-900 shadow-sm">
-              <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+            <div role="alert" className="p-4 bg-red-50 border-l-4 border-red-600 rounded-r-xl flex items-start space-x-3 text-red-900 shadow-sm">
+              <AlertCircle aria-hidden="true" className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
               <div>
-                <h4 className="text-sm font-bold uppercase tracking-wider text-red-800">Critical Statutory Deadline Alert</h4>
+                <h2 className="text-sm font-bold uppercase tracking-wider text-red-800">Critical Statutory Deadline Alert</h2>
                 <p className="text-xs mt-1 leading-relaxed">{result.statutory_deadline_warning}</p>
               </div>
             </div>
@@ -180,7 +187,7 @@ export const ProBonoTriagePortal: React.FC = () => {
           {/* Eligibility Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
-              <span className="text-xs font-semibold text-gray-500 uppercase">Federal Poverty Guideline</span>
+              <h3 className="text-xs font-semibold text-gray-500 uppercase">Federal Poverty Guideline</h3>
               <div className="mt-2 flex items-baseline space-x-2">
                 <span className="text-3xl font-extrabold text-emerald-700">{result.poverty_guideline_percentage}%</span>
                 <span className="text-sm text-gray-500">of FPL</span>
@@ -191,7 +198,7 @@ export const ProBonoTriagePortal: React.FC = () => {
             </div>
 
             <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
-              <span className="text-xs font-semibold text-gray-500 uppercase">Matter Urgency Tier</span>
+              <h3 className="text-xs font-semibold text-gray-500 uppercase">Matter Urgency Tier</h3>
               <div className="mt-2 flex items-baseline space-x-2">
                 <span className="text-2xl font-extrabold text-red-600">{result.urgency_level.replace('_', ' ')}</span>
               </div>
@@ -199,7 +206,7 @@ export const ProBonoTriagePortal: React.FC = () => {
             </div>
 
             <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
-              <span className="text-xs font-semibold text-gray-500 uppercase">Categorized Legal Domain</span>
+              <h3 className="text-xs font-semibold text-gray-500 uppercase">Categorized Legal Domain</h3>
               <div className="mt-2 flex items-baseline space-x-2">
                 <span className="text-lg font-bold text-gray-900 capitalize">
                   {result.category.replace(/_/g, ' ')}
@@ -213,13 +220,13 @@ export const ProBonoTriagePortal: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm space-y-4">
               <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider flex items-center space-x-2">
-                <CheckSquare className="w-4 h-4 text-emerald-600" />
+                <CheckSquare aria-hidden="true" className="w-4 h-4 text-emerald-600" />
                 <span>Pro-Se Tenant Emergency Checklist:</span>
               </h3>
               <ul className="space-y-3">
                 {result.self_help_checklist.map((item, i) => (
                   <li key={i} className="flex items-start space-x-2.5 text-xs text-gray-700 leading-relaxed">
-                    <span className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0 font-bold text-[10px]">
+                    <span aria-hidden="true" className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0 font-bold text-[10px]">
                       {i + 1}
                     </span>
                     <span>{item}</span>
@@ -230,16 +237,20 @@ export const ProBonoTriagePortal: React.FC = () => {
 
             <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm space-y-4">
               <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider flex items-center space-x-2">
-                <FileText className="w-4 h-4 text-blue-600" />
+                <FileText aria-hidden="true" className="w-4 h-4 text-blue-600" />
                 <span>Required Court Forms to File:</span>
               </h3>
               <div className="space-y-2">
                 {result.suggested_court_forms.map((form, i) => (
                   <div key={i} className="p-3 bg-gray-50 border border-gray-200 rounded-lg flex items-center justify-between text-xs">
                     <span className="font-semibold text-gray-800">{form}</span>
-                    <span className="text-[10px] text-google-blue font-semibold hover:underline cursor-pointer">
+                    <button
+                      type="button"
+                      aria-label={`Download ${form} PDF`}
+                      className="text-[10px] text-google-blue font-semibold hover:underline focus-visible:ring-1 focus-visible:ring-google-blue"
+                    >
                       Download PDF
-                    </span>
+                    </button>
                   </div>
                 ))}
               </div>
@@ -263,12 +274,14 @@ export const ProBonoTriagePortal: React.FC = () => {
                   <p className="text-xs text-teal-800 font-medium">{clinic.specialty_area}</p>
                   <div className="pt-2 text-xs text-gray-600 space-y-1">
                     <div className="flex items-center space-x-2">
-                      <MapPin className="w-3.5 h-3.5 text-gray-400" />
+                      <MapPin aria-hidden="true" className="w-3.5 h-3.5 text-gray-400" />
                       <span>{clinic.address}</span>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <Phone className="w-3.5 h-3.5 text-gray-400" />
-                      <span className="font-semibold text-gray-800">{clinic.phone}</span>
+                      <Phone aria-hidden="true" className="w-3.5 h-3.5 text-gray-400" />
+                      <a href={`tel:${clinic.phone}`} aria-label={`Call ${clinic.organization_name} at ${clinic.phone}`} className="font-semibold text-gray-800 hover:underline">
+                        {clinic.phone}
+                      </a>
                     </div>
                   </div>
                   <div className="pt-2 flex justify-between items-center text-xs">
@@ -277,17 +290,18 @@ export const ProBonoTriagePortal: React.FC = () => {
                       href={clinic.website}
                       target="_blank"
                       rel="noreferrer"
-                      className="text-emerald-700 font-bold hover:underline inline-flex items-center space-x-1"
+                      aria-label={`Visit intake website for ${clinic.organization_name}`}
+                      className="text-emerald-700 font-bold hover:underline inline-flex items-center space-x-1 focus-visible:ring-1 focus-visible:ring-emerald-600"
                     >
                       <span>Direct Intake</span>
-                      <ExternalLink className="w-3 h-3" />
+                      <ExternalLink aria-hidden="true" className="w-3 h-3" />
                     </a>
                   </div>
                 </div>
               ))}
             </div>
           </div>
-        </div>
+        </section>
       )}
     </div>
   );
