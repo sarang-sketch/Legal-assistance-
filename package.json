@@ -1,0 +1,11 @@
+{
+  "name": "justitia-ai-platform",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AI Legal Assistant & Equal Access Platform natively built on Google Cloud & Gemini 1.5 Pro",
+  "scripts": {
+    "install:all": "node -e \"const fs = require('fs'), { execSync } = require('child_process'); const dir = fs.existsSync('frontend') ? 'frontend' : '.'; execSync('npm install', { cwd: dir, stdio: 'inherit' });\"",
+    "build": "node -e \"const fs = require('fs'), { execSync } = require('child_process'); const dir = fs.existsSync('frontend') ? 'frontend' : '.'; execSync('npm install && npm run build', { cwd: dir, stdio: 'inherit' }); if (fs.existsSync('frontend/dist') && !fs.existsSync('dist')) { fs.cpSync('frontend/dist', 'dist', { recursive: true }); }\"",
+    "preview": "node -e \"const fs = require('fs'), { execSync } = require('child_process'); const dir = fs.existsSync('frontend') ? 'frontend' : '.'; execSync('npm run preview', { cwd: dir, stdio: 'inherit' });\""
+  }
+}
