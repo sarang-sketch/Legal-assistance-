@@ -91,12 +91,41 @@ async def health_check() -> PlatformHealthResponse:
     )
 
 
-@app.get("/", tags=["Root"])
-async def root():
-    """Root redirect message pointing to API documentation."""
-    return {
-        "platform": settings.APP_NAME,
-        "version": settings.APP_VERSION,
-        "docs_url": f"{settings.API_V1_PREFIX}/docs",
-        "ethics_disclaimer": settings.LEGAL_DISCLAIMER_NOTICE,
-    }
+from pathlib import Path
+from starlette.staticfiles import StaticFiles
+from starlette.responses import FileResponse
+
+# Check for compiled React frontend in static/ or ../frontend/dist
+static_dir = Path(__file__).resolve().parent.parent / "static"
+if not static_dir.exists():
+    static_dir = Path(__file__).resolve().parent.parent.parent / "frontend" / "dist"
+
+if static_dir.exists():
+    assets_dir = static_dir / "assets"
+    if assets_dir.exists():
+        app.mount("/assets", StaticFiles(directory=str(assets_dir)), name="assets")
+
+    @app.get("/{full_path:path}", tags=["Frontend SPA"])
+    async def serve_spa(full_path: str):
+        """Serve compiled React SPA for any frontend route."""
+        # Allow API routes and health check to pass through
+        if full_path.startswith("api/") or full_path == "health":
+            return JSONResponse(status_code=404, content={"detail": "Not Found"})
+        target_file = static_dir / full_path
+        if target_file.is_file():
+            return FileResponse(str(target_file))
+        index_file = static_dir / "index.html"
+        if index_file.exists():
+            return FileResponse(str(index_file))
+        return JSONResponse(status_code=404, content={"detail": "Frontend not found"})
+else:
+    @app.get("/", tags=["Root"])
+    async def root():
+        """Root redirect message pointing to API documentation."""
+        return {
+            "platform": settings.APP_NAME,
+            "version": settings.APP_VERSION,
+            "docs_url": f"{settings.API_V1_PREFIX}/docs",
+            "ethics_disclaimer": settings.LEGAL_DISCLAIMER_NOTICE,
+        }
+
