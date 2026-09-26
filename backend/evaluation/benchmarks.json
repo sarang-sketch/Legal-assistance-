@@ -1,0 +1,38 @@
+[
+  {
+    "id": "BENCH-001",
+    "domain": "housing_and_eviction",
+    "prompt": "What are the legal defenses available against an unlawful detainer eviction action?",
+    "jurisdiction": "California",
+    "expected_statutes": ["Cal. Civ. Code § 1942.5", "Cal. Civ. Code § 1941.1"],
+    "expected_concepts": ["implied warranty of habitability", "retaliatory eviction", "defective notice", "repair and deduct"],
+    "pro_se_relevance": true
+  },
+  {
+    "id": "BENCH-002",
+    "domain": "commercial_contracts",
+    "prompt": "Evaluate unilateral indemnification clause without limitation of liability carve-outs.",
+    "jurisdiction": "Delaware",
+    "expected_statutes": ["U.C.C. § 2-719", "Restatement (Second) of Contracts § 195"],
+    "expected_concepts": ["unconscionability", "gross negligence carve-out", "bilateral reciprocity", "defense indemnity"],
+    "pro_se_relevance": false
+  },
+  {
+    "id": "BENCH-003",
+    "domain": "immigration_asylum",
+    "prompt": "What is the statutory deadline to file Form I-589 for an affirmative asylum applicant?",
+    "jurisdiction": "Federal",
+    "expected_statutes": ["8 U.S.C. § 1158(a)(2)(B)", "8 C.F.R. § 208.4"],
+    "expected_concepts": ["one-year filing deadline", "extraordinary circumstances", "changed country conditions"],
+    "pro_se_relevance": true
+  },
+  {
+    "id": "BENCH-004",
+    "domain": "debt_and_consumer_rights",
+    "prompt": "Can a third-party debt collector contact a debtor at work after receiving written refusal?",
+    "jurisdiction": "Federal",
+    "expected_statutes": ["15 U.S.C. § 1692c", "Fair Debt Collection Practices Act (FDCPA)"],
+    "expected_concepts": ["cease communication notice", "inconvenient time or place", "statutory damages"],
+    "pro_se_relevance": true
+  }
+]
